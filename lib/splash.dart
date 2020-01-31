@@ -4,6 +4,7 @@ import 'package:death_counter/policy.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -26,6 +27,13 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    OneSignal.shared.init("ac82a7e7-af3e-4573-b4e9-5c23e93d4a68", iOSSettings: {
+      OSiOSSettings.autoPrompt: false,
+      OSiOSSettings.inAppLaunchUrl: true
+    });
+    OneSignal.shared
+        .setInFocusDisplayType(OSNotificationDisplayType.notification);
 
     FirebaseAdMob.instance
         .initialize(appId: 'ca-app-pub-2118340185089535~1800470902');

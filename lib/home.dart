@@ -2,6 +2,7 @@ import 'package:countdown_flutter/countdown_flutter.dart';
 import 'package:death_counter/choose-card.dart';
 import 'package:death_counter/text.dart';
 import 'package:death_counter/toast.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +14,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
+  BannerAd myBanner = BannerAd(
+    adUnitId: 'ca-app-pub-2118340185089535/4235062555',
+    size: AdSize.banner,
+    targetingInfo: MobileAdTargetingInfo(
+      keywords: <String>[],
+      testDevices: <String>[], // Android emulators are considered test devices
+    ),
+    listener: (MobileAdEvent event) {
+      print("BannerAd event is $event");
+    },
+  );
+
   int days;
 
   @override
@@ -22,6 +35,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     firstTime();
     super.initState();
     print('Started');
+    FirebaseAdMob.instance
+        .initialize(appId: "ca-app-pub-2946850357131537~8739245665");
+
+    myBanner
+      ..load()
+      ..show();
   }
 
   @override

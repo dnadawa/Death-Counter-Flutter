@@ -114,7 +114,7 @@ class _PlayGameState extends State<PlayGame> {
                 RaisedButton(
                   onPressed: () {
                     print('clicked');
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       CupertinoPageRoute(builder: (context) {
                         myInterstitial
