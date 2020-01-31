@@ -70,10 +70,11 @@ class _PlayGameState extends State<PlayGame> {
       ),
       body: Column(
         children: <Widget>[
+          SizedBox(height: 5),
           Expanded(
             flex: 2,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 'IF YOU COULD FIND OUT EXACTLY WHEN YOU\'RE GOING TO DIE... WOULD YOU WANT TO KNOW?',
                 style: TextStyle(color: Colors.grey, fontSize: 16),
@@ -81,16 +82,17 @@ class _PlayGameState extends State<PlayGame> {
             ),
           ),
           Expanded(
-            flex: 6,
+            flex: 9,
             child: Container(
               color: Colors.white,
               child: Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: NativeAdmobBannerView(
                   adUnitID: "ca-app-pub-2118340185089535/9362146598",
+                  //adUnitID: 'ca-app-pub-2946850357131537/4427500217',
                   style: BannerStyle.dark, // enum dark or light
                   showMedia: true, // whether to show media view or not
-                  contentPadding: EdgeInsets.all(10), // content padding
+                  contentPadding: EdgeInsets.all(0), // content padding
                   onCreate: (controller) {
                     controller
                         .setStyle(BannerStyle.light); // Dynamic update style
@@ -100,7 +102,7 @@ class _PlayGameState extends State<PlayGame> {
             ),
           ),
           Expanded(
-            flex: 4,
+            flex: 5,
             child: Container(
               width: double.infinity,
               height: MediaQuery.of(context).size.height / 3,

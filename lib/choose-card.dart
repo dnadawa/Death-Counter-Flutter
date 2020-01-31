@@ -20,18 +20,15 @@ class _ChooseCardState extends State<ChooseCard> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50),
-            child: Text(
-              'Select Your Card',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 30),
-            ),
+          SizedBox(height: 45),
+          Text(
+            'Select Your Card',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.white, fontSize: 30),
           ),
+          SizedBox(height: 15),
           Row(
             children: <Widget>[
               Expanded(
