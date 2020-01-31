@@ -12,17 +12,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  InterstitialAd myInterstitial = InterstitialAd(
-    adUnitId: 'ca-app-pub-2118340185089535/7119126634',
-    targetingInfo: MobileAdTargetingInfo(
-      keywords: <String>[],
-      testDevices: <String>[], // Android emulators are considered test devices
-    ),
-    listener: (MobileAdEvent event) {
-      print("InterstitialAd event is $event");
-    },
-  );
-
   @override
   void initState() {
     // TODO: implement initState
@@ -38,16 +27,34 @@ class _SplashScreenState extends State<SplashScreen> {
     FirebaseAdMob.instance
         .initialize(appId: 'ca-app-pub-2118340185089535~1800470902');
 
+    InterstitialAd myInterstitial = InterstitialAd(
+      adUnitId: 'ca-app-pub-2118340185089535/7119126634',
+      targetingInfo: MobileAdTargetingInfo(
+        keywords: <String>[],
+        testDevices: <
+            String>[], // Android emulators are considered test devices
+      ),
+      listener: (MobileAdEvent event) {
+        Navigator.pushReplacement(
+          context,
+          CupertinoPageRoute(builder: (context) {
+            return Policy();
+          }),
+        );
+        print("InterstitialAd event is $event");
+      },
+    );
+
     Timer(Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        CupertinoPageRoute(builder: (context) {
-          myInterstitial
-            ..load()
-            ..show();
-          return Policy();
-        }),
-      );
+      myInterstitial
+        ..load()
+        ..show();
+//      Navigator.pushReplacement(
+//        context,
+//        CupertinoPageRoute(builder: (context) {
+//          return Policy();
+//        }),
+//      );
     });
   }
 

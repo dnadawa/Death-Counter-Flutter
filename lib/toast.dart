@@ -12,7 +12,7 @@ class ToastBar {
         msg: text,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.TOP,
-        timeInSecForIos: 1,
+        timeInSecForIos: 5,
         backgroundColor: color,
         textColor: Colors.white,
         fontSize: 16.0);

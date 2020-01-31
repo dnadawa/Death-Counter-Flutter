@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:countdown_flutter/countdown_flutter.dart';
 import 'package:death_counter/choose-card.dart';
 import 'package:death_counter/text.dart';
@@ -14,9 +16,31 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
+  Future<bool> _onWillPop() {
+    return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Are you sure?'),
+            content: Text('Do you want to exit an App'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('No'),
+              ),
+              FlatButton(
+                onPressed: () => exit(0),
+                /*Navigator.of(context).pop(true)*/
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   BannerAd myBanner = BannerAd(
     adUnitId: 'ca-app-pub-2118340185089535/4235062555',
-    size: AdSize.banner,
+    size: AdSize.smartBanner,
     targetingInfo: MobileAdTargetingInfo(
       keywords: <String>[],
       testDevices: <String>[], // Android emulators are considered test devices
@@ -86,104 +110,99 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             builder: (BuildContext ctx, Duration remaining) {
               x.setInt('days', remaining.inSeconds);
 
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 4,
-                          child: Image(
-                            image: AssetImage("images/home.png"),
-                          ),
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 4,
+                        child: Image(
+                          image: AssetImage("images/home.png"),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 5),
-                            child: RaisedButton(
-                              onPressed: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChooseCard(
-                                            remaining: remaining.inSeconds,
-                                          )),
-                                );
-                              },
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Container(
-                                    height: 20,
-                                    width: 20,
-                                    child: Image.asset(
-                                      'images/logo.png',
-                                    ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: RaisedButton(
+                            onPressed: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChooseCard(
+                                          remaining: remaining.inSeconds,
+                                        )),
+                              );
+                            },
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Container(
+                                  height: 20,
+                                  width: 20,
+                                  child: Image.asset(
+                                    'images/logo.png',
                                   ),
-                                  Text(
-                                    "Play",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
+                                ),
+                                Text(
+                                  "Play",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: CountDownText(
-                        time: (remaining.inDays ~/ 365).toString(),
-                        color: Colors.red,
-                        suffix: 'YRS',
-                      ),
-                    ),
-                    CountDownText(
-                      time: ((remaining.inDays % 365)).toString(),
-                      suffix: "DAY",
+                        ),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: CountDownText(
+                      time: (remaining.inDays ~/ 365).toString(),
                       color: Colors.red,
+                      suffix: 'YRS',
                     ),
-                    CountDownText(
-                      time: (remaining.inHours % 24).toString(),
-                      suffix: "HRS",
-                      color: Colors.white,
+                  ),
+                  CountDownText(
+                    time: ((remaining.inDays % 365)).toString(),
+                    suffix: "DAY",
+                    color: Colors.red,
+                  ),
+                  CountDownText(
+                    time: (remaining.inHours % 24).toString(),
+                    suffix: "HRS",
+                    color: Colors.white,
+                  ),
+                  CountDownText(
+                    time: (remaining.inMinutes % 60).toString(),
+                    suffix: "MIN",
+                    color: Colors.white,
+                  ),
+                  CountDownText(
+                    time: (remaining.inSeconds % 60).toString(),
+                    suffix: "SEC",
+                    color: Colors.white,
+                  ),
+                  RaisedButton(
+                    color: Colors.black,
+                    child: Text(
+                      'Refresh',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
-                    CountDownText(
-                      time: (remaining.inMinutes % 60).toString(),
-                      suffix: "MIN",
-                      color: Colors.white,
-                    ),
-                    CountDownText(
-                      time: (remaining.inSeconds % 60).toString(),
-                      suffix: "SEC",
-                      color: Colors.white,
-                    ),
-                    RaisedButton(
-                      color: Colors.black,
-                      child: Text(
-                        'Refresh',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                      onPressed: () {
-                        int newdays = x.getInt('new');
-                        x.setInt('days', newdays);
-                        RestartWidget.restartApp(context);
-                      },
-                    )
-                  ],
-                ),
+                    onPressed: () {
+                      int newdays = x.getInt('new');
+                      x.setInt('days', newdays);
+                      RestartWidget.restartApp(context);
+                    },
+                  )
+                ],
               );
             })
         : Center(
@@ -192,31 +211,34 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             ),
           );
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
         backgroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: 35,
-              width: 35,
-              child: Image(
-                image: AssetImage('images/logo.png'),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          backgroundColor: Colors.black,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: 35,
+                width: 35,
+                child: Image(
+                  image: AssetImage('images/logo.png'),
+                ),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text("Count Down Death"),
-          ],
+              SizedBox(
+                width: 10,
+              ),
+              Text("Count Down Death"),
+            ],
+          ),
         ),
+        body: SingleChildScrollView(child: _countDown),
       ),
-      body: _countDown,
     );
   }
 }

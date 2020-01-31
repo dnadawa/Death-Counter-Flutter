@@ -88,7 +88,13 @@ class _RotatableCardState extends State<RotatableCard> {
 
           prefs.setInt('days', days);
           prefs.setInt('new', days);
-          await ToastBar(text: 'Your time extended!', color: Colors.blue)
+          var hours = y ~/ 3600;
+          var mins = (y % 3600) ~/ 60;
+
+          print('seconds -> $days \t hors -> $hours \t mins $mins');
+          await ToastBar(
+                  text: 'Your time extended by $hours Hours and $mins Minutes!',
+                  color: Colors.blue)
               .show();
 
           //RestartWidget.restartApp(context);
@@ -106,7 +112,12 @@ class _RotatableCardState extends State<RotatableCard> {
           });
           prefs.setInt('days', days);
           prefs.setInt('new', days);
-          await ToastBar(text: 'Your Time is Reduced!', color: Colors.red)
+
+          var hours = y ~/ 3600;
+          var mins = (y % 3600) ~/ 60;
+          await ToastBar(
+                  text: 'Your time reduced by $hours Hours and $mins Minutes!',
+                  color: Colors.red)
               .show();
 
           // RestartWidget.restartApp(context);
@@ -135,11 +146,11 @@ class _RotatableCardState extends State<RotatableCard> {
             padding: const EdgeInsets.all(10),
             child: x == 1
                 ? Image.asset(
-                    'images/devil.png',
+                    'images/angel.png',
                     fit: BoxFit.cover,
                   )
                 : Image.asset(
-                    'images/angel.png',
+                    'images/devil.png',
                     fit: BoxFit.cover,
                   ),
           ),

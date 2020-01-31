@@ -3,8 +3,7 @@ import 'package:death_counter/main.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:native_ads/native_ad_param.dart';
-import 'package:native_ads/native_ad_view.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
 
 class PlayGame extends StatefulWidget {
   @override
@@ -12,23 +11,35 @@ class PlayGame extends StatefulWidget {
 }
 
 class _PlayGameState extends State<PlayGame> {
-  InterstitialAd myInterstitial = InterstitialAd(
-    adUnitId: 'ca-app-pub-2118340185089535/7119126634',
-    targetingInfo: MobileAdTargetingInfo(
-      keywords: <String>[],
-      testDevices: <String>[], // Android emulators are considered test devices
-    ),
-    listener: (MobileAdEvent event) {
-      print("InterstitialAd event is $event");
-    },
-  );
-
+  InterstitialAd myInterstitial;
+  final _nativeAdmob = NativeAdmob();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _nativeAdmob.initialize(appID: 'ca-app-pub-2118340185089535~1800470902');
+
     FirebaseAdMob.instance
         .initialize(appId: 'ca-app-pub-2118340185089535~1800470902');
+
+    myInterstitial = InterstitialAd(
+      adUnitId: 'ca-app-pub-2118340185089535/7119126634',
+      targetingInfo: MobileAdTargetingInfo(
+        keywords: <String>[],
+        testDevices: <
+            String>[], // Android emulators are considered test devices
+      ),
+      listener: (MobileAdEvent event) {
+        Navigator.pushReplacement(
+          context,
+          CupertinoPageRoute(builder: (context) {
+            return RestartWidget(child: Home());
+          }),
+        );
+        print("InterstitialAd event is $event");
+      },
+    );
   }
 
   @override
@@ -75,18 +86,15 @@ class _PlayGameState extends State<PlayGame> {
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(10),
-                child: NativeAdView(
-                  onParentViewCreated: (_) {},
-                  androidParam: AndroidParam()
-                    ..placementId =
-                        "ca-app-pub-2118340185089535/9362146598" // test
-                    ..packageName = "com.pjapp.countdowndeath"
-                    ..layoutName = "native_ad_layout"
-                    ..attributionText = "AD",
-                  onAdImpression: () => print("onAdImpression!!!"),
-                  onAdClicked: () => print("onAdClicked!!!"),
-                  onAdFailedToLoad: (Map<String, dynamic> error) =>
-                      print("onAdFailedToLoad!!! $error"),
+                child: NativeAdmobBannerView(
+                  adUnitID: "ca-app-pub-2118340185089535/9362146598",
+                  style: BannerStyle.dark, // enum dark or light
+                  showMedia: true, // whether to show media view or not
+                  contentPadding: EdgeInsets.all(10), // content padding
+                  onCreate: (controller) {
+                    controller
+                        .setStyle(BannerStyle.light); // Dynamic update style
+                  },
                 ),
               ),
             ),
@@ -113,16 +121,16 @@ class _PlayGameState extends State<PlayGame> {
                 ),
                 RaisedButton(
                   onPressed: () {
+                    myInterstitial
+                      ..load()
+                      ..show();
                     print('clicked');
-                    Navigator.pushReplacement(
-                      context,
-                      CupertinoPageRoute(builder: (context) {
-                        myInterstitial
-                          ..load()
-                          ..show();
-                        return RestartWidget(child: Home());
-                      }),
-                    );
+//                    Navigator.pushReplacement(
+//                      context,
+//                      CupertinoPageRoute(builder: (context) {
+//                        return RestartWidget(child: Home());
+//                      }),
+//                    );
                   },
                   color: Colors.teal,
                   child: Text(

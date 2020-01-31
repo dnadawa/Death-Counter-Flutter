@@ -1,9 +1,7 @@
 import 'package:death_counter/splash.dart';
 import 'package:flutter/material.dart';
-import 'package:native_ads/native_ads.dart';
 
 void main() {
-  NativeAds.initialize();
   runApp(
     MaterialApp(
       theme: ThemeData(primaryColor: Colors.black),
